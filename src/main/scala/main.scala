@@ -1,5 +1,4 @@
-import java.nio.file.{Files, Paths}
-
+import java.nio.file.{Files, Paths, StandardOpenOption}
 
 import org.jsoup.Jsoup
 import org.jsoup.nodes.{Document, Element}
@@ -111,7 +110,7 @@ object main {
       val generatedPage = allNewAds.map("<iframe src=\"" + _.originalLink + "\" height=\"2000\" width=\"1850\" allowTransparency=\"true\" scrolling=\"no\" ></iframe><br>\n").reduce(_ + _)
 
       Files.write(outputPath, generatedPage.getBytes)
-      Files.write(path, allNewAds.map(_.hashCode + "\n").reduce(_ + _).getBytes)
+      Files.write(path, allNewAds.map(_.hashCode + "\n").reduce(_ + _).getBytes, StandardOpenOption.APPEND)
     }
   }
 }
