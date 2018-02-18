@@ -107,7 +107,11 @@ object main {
     Files.deleteIfExists(outputPath)
 
     if (allNewAds.nonEmpty) {
-      val generatedPage = allNewAds.map("<iframe src=\"" + _.originalLink + "\" height=\"2000\" width=\"1850\" allowTransparency=\"true\" scrolling=\"no\" ></iframe><br>\n").reduce(_ + _)
+      val generatedPage = allNewAds
+          .map(_.originalLink.replaceFirst("https://m.ss.com", "https://ss.com"))
+        .map(link => "<a href=\"" + link + "\">" + link + "</a>\n" +
+          "<iframe src=\"" + link + "\" height=\"2000\" width=\"1850\" allowTransparency=\"true\" scrolling=\"yes\" ></iframe><br>\n")
+        .reduce(_ + _)
 
       Files.write(outputPath, generatedPage.getBytes)
       Files.write(path, allNewAds.map(_.hashCode + "\n").reduce(_ + _).getBytes, StandardOpenOption.APPEND)
