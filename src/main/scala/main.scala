@@ -3,8 +3,8 @@ import java.nio.file.{Files, Paths, StandardOpenOption}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.{Document, Element}
 
-import scala.io.Source
 import scala.collection.JavaConversions._
+import scala.io.Source
 
 object main {
 
@@ -24,9 +24,9 @@ object main {
     // Find main table element
     val mainTable = doc.getElementById("main_mtbl")
     // Get all rows in a table
-    val rows = mainTable.getElementsByTag("tr")
+    val linkInRow = mainTable.getElementsByTag("a")
     // Extract links to ads
-    val links = rows.eachAttr("onclick").toList.map("https://m.ss.com" + _.split("'")(1))
+    val links = linkInRow.eachAttr("href").toList.map("https://m.ss.com" + _)
 
     links
   }
@@ -63,14 +63,18 @@ object main {
 
     def tableRowToPair(e: Element): (String, String) = {
       val texts = e.getElementsByTag("td").toList.map(_.text)
-      (texts.head, texts(1))
+      val value = {
+        if (texts.size > 1) texts(1)
+        else "NOVALUE"
+      }
+      (texts.head, value)
     }
 
     val map = table.map(tableRowToPair).toMap
 
     val prices = map("Цена:").replace(" ", "").replace("(", "").split("€")
 
-    Advertisement(main.text(), map("Комнат:").toInt, map("Площадь:").toFloat, map("Улица:"), map("Серия:"), map("Этаж / этажей:"), prices(0).toFloat, prices(1).toFloat, map("Тип дома:"), link)
+    Advertisement(main.text(), map("Комнат:").toInt, map("Площадь:").toFloat, map("Улица:"), map("Серия:"), map("Этаж / этажей:"), prices(0).toFloat, 0, map("Тип дома:"), link)
   }
 
   def main(args: Array[String]): Unit = {
@@ -98,7 +102,10 @@ object main {
 
     println("Already seen " + viewedAds.size + " ads.")
 
-    val allPages = getAllPages("https://m.ss.com/ru/real-estate/flats/riga/kengarags/sell/")
+    val allPages = getAllPages("https://m.ss.com/ru/real-estate/flats/riga/all/hand_over/")
+
+    println("Found " + allPages.size + " new pages.")
+
     val allNewAds = allPages.flatMap(extractLinks).map(linkToAdvertisement).filter(_.roomsBetween(minRooms, maxRooms)).filterNot(adv => viewedAds.contains(adv.hashCode()))
 
     println("Found " + allNewAds.size + " new ads.")
@@ -108,7 +115,7 @@ object main {
 
     if (allNewAds.nonEmpty) {
       val generatedPage = allNewAds
-          .map(_.originalLink.replaceFirst("https://m.ss.com", "https://ss.com"))
+        .map(_.originalLink.replaceFirst("https://m.ss.com", "https://ss.com"))
         .map(link => "<a href=\"" + link + "\">" + link + "</a>\n" +
           "<iframe src=\"" + link + "\" height=\"2000\" width=\"1850\" allowTransparency=\"true\" scrolling=\"yes\" ></iframe><br>\n")
         .reduce(_ + _)
