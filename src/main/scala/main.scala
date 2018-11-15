@@ -11,6 +11,14 @@ object main {
   private val FILE_TO_STORE_VIEWED_ADS = "AlreadyViewedAds.log"
   private val OUTPUT_HTML_FILE = "NewAds.html"
 
+  def toInt(s: String): Int = {
+    try {
+      s.toInt
+    } catch {
+      case e: Exception => 0
+    }
+  }
+
   case class Advertisement(text: String, rooms: Integer, area: Float, address: String, seria: String, floor: String, price: Float, pricePerMeter: Float, homeType: String, originalLink: String) {
 
     def roomsBetween(min: Int, max: Int): Boolean = {
@@ -79,7 +87,7 @@ object main {
 
     val prices = map("Цена:").replace(" ", "").replace("(", "").split("€")
 
-    Advertisement(main.text(), map("Комнат:").toInt, map("Площадь:").toFloat, map("Улица:"), map("Серия:"), map("Этаж / этажей:"), prices(0).toFloat, 0, map("Тип дома:"), link)
+    Advertisement(main.text(), toInt(map("Комнат:")), map("Площадь:").toFloat, map("Улица:"), map("Серия:"), map("Этаж / этажей:"), prices(0).toFloat, 0, map("Тип дома:"), link)
   }
 
   def main(args: Array[String]): Unit = {
