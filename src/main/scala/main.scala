@@ -33,31 +33,36 @@ object main {
 
   private def getAllPages(link: String) = {
 
-    // Create map (link -> document)
-    def mainloop(link: String, docs: Map[String, Document]): Map[String, Document] = {
-      // Download page from link
-      val doc = Jsoup.connect(link).get()
-      // find footer with navigation buttons
-      val navigationFooter = doc.getElementById("footer_navi")
-      // get A HTML tags links from buttons
-      val lastNextPageButtons = navigationFooter.getElementsByTag("a")
-      // Create links
-      val lastNextPageLinks = lastNextPageButtons.eachAttr("onclick").toList.map("https://m.ss.com" + _.split("'")(1))
+    print("Acquiring ads pages: ")
+    print(".")
 
-      // On ss.com pressing next page on last page will get you to first age.
-      // So we continue to getting pages unless we got page that was already processed
-      if (docs.contains(link)) docs
+    val firstPage = Jsoup.connect(link).get()
+    val linkToLastPage = firstPage.getElementsByClass("navi navi_page_disabled")(0)
+    val lastPageLinkeString = linkToLastPage.attr("href")
+    val indexOfNumberStart = lastPageLinkeString.indexOf("/page")
+    val lastPageIndex = lastPageLinkeString.substring(indexOfNumberStart + 5, lastPageLinkeString.length - ".html".length).toInt
+
+    def mainloop(index: Int, docs: List[Document]): List[Document] = {
+      val link = "https://m.ss.com/ru/real-estate/flats/riga/all/hand_over/page" + index + ".html"
+      Thread.sleep((Math.random() * 1000).toLong)   // avoid spamming ss.com with requests
+      print(".")
+      if (index > lastPageIndex) {
+        println(" DONE!")
+        docs
+      }
       else {
-        mainloop(lastNextPageLinks(1), docs + (link -> doc))
+        mainloop(index + 1, Jsoup.connect(link).get() :: docs)
       }
     }
 
-    mainloop(link, Map()).values
+    mainloop(2, List(firstPage))
   }
 
   private def linkToAdvertisement(link: String): Advertisement = {
 
+    print(".")
     val doc = Jsoup.connect(link).get()
+    Thread.sleep((Math.random() * 1000).toLong)   // avoid spamming ss.com with requests
     val main = doc.getElementById("main")
     val table = main.getElementsByTag("tr").toList
 
@@ -106,7 +111,9 @@ object main {
 
     println("Found " + allPages.size + " new pages.")
 
+    print("Extracting ads information: ")
     val allNewAds = allPages.flatMap(extractLinks).map(linkToAdvertisement).filter(_.roomsBetween(minRooms, maxRooms)).filterNot(adv => viewedAds.contains(adv.hashCode()))
+    println( "DONE!")
 
     println("Found " + allNewAds.size + " new ads.")
 
