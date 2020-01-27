@@ -22,12 +22,12 @@ public enum Config {
     public static final Path ADDS_FOLDER    = Paths.get("ads");
 
 
-    static {
-        System.setProperty("http.proxyHost", "proxy.lvrix.atrema.deloitte.com");
-        System.setProperty("http.proxyPort", "3128");
-        System.setProperty("https.proxyHost", "proxy.lvrix.atrema.deloitte.com");
-        System.setProperty("https.proxyPort", "3128");
-    }
+//    static {
+//        System.setProperty("http.proxyHost", "proxy.lvrix.atrema.deloitte.com");
+//        System.setProperty("http.proxyPort", "3128");
+//        System.setProperty("https.proxyHost", "proxy.lvrix.atrema.deloitte.com");
+//        System.setProperty("https.proxyPort", "3128");
+//    }
 
     public static String fileNameFromLink(String in) {
         return in.replace(Config.WEB_PAGE, "")

@@ -71,6 +71,7 @@ public class Process {
     }
 
     private static List<String> extractLinks(Document doc) {
+        System.out.println(".");
         // Find main table element
         Element mainTable = doc.getElementById("main_mtbl");
         // Get all rows in a table
@@ -89,11 +90,12 @@ public class Process {
             String fname = Config.fileNameFromLink(link);
             Path adFile = addsFolder.resolve(fname);
             if (!Files.exists(adFile)) {
+                System.out.print(".");
                 Document document = Jsoup.connect(link)
                                          .get();
 
                 Files.write(adFile, Collections.singleton(document.toString()));
-                Thread.sleep((long) (Math.random() * 1000));  // avoid spamming
+                Thread.sleep((long) (Math.random() * 100));  // avoid spamming
             }
         }
     }

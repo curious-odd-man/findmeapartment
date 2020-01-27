@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="131d9efa-8235-47f7-a275-a580b91d251d" name="Default Changelist" comment="" />
+    <list default="true" id="131d9efa-8235-47f7-a275-a580b91d251d" name="Default Changelist" comment="New proj">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Config.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Config.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Process.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Process.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -63,8 +70,7 @@
     </configuration>
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="Main" />
-      <module name="findmeapt" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <module name="findmeapartment" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -137,9 +143,27 @@
       <option name="presentableId" value="Default" />
       <updated>1580131277360</updated>
     </task>
+    <task id="LOCAL-00001" summary="New proj">
+      <created>1580155484385</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1580155484385</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
+  <component name="VcsManagerConfiguration">
+    <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
+    <option name="CHECK_NEW_TODO" value="false" />
+    <MESSAGE value="New proj" />
+    <option name="LAST_COMMIT_MESSAGE" value="New proj" />
+  </component>
   <component name="WindowStateProjectService">
+    <state x="655" y="249" key="#Main" timestamp="1580155511833">
+      <screen x="0" y="0" width="1920" height="1160" />
+    </state>
+    <state x="655" y="249" key="#Main/0.0.1920.1160@0.0.1920.1160" timestamp="1580155511833" />
     <state x="552" y="182" key="#Project_Structure" timestamp="1580138660643">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -148,29 +172,62 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="765" y="240" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1040/1920.-464.1080.1880/-1920.0.1536.824@0.0.1920.1040" timestamp="1580132002029" />
-    <state width="1877" height="104" key="GridCell.Tab.0.bottom" timestamp="1580139810160">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state x="811" y="472" key="#com.intellij.ide.util.projectWizard.JdkChooserPanel.MyDialog" timestamp="1580155500424">
+      <screen x="0" y="0" width="1920" height="1160" />
+    </state>
+    <state x="811" y="472" key="#com.intellij.ide.util.projectWizard.JdkChooserPanel.MyDialog/0.0.1920.1160@0.0.1920.1160" timestamp="1580155500424" />
+    <state x="626" y="179" key="CommitChangelistDialog2" timestamp="1580158742961">
+      <screen x="0" y="0" width="1920" height="1160" />
+    </state>
+    <state x="626" y="179" key="CommitChangelistDialog2/0.0.1920.1160@0.0.1920.1160" timestamp="1580158742961" />
+    <state width="1877" height="396" key="GridCell.Tab.0.bottom" timestamp="1580158686809">
+      <screen x="0" y="0" width="1920" height="1160" />
     </state>
     <state width="1877" height="104" key="GridCell.Tab.0.bottom/0.0.1920.1040/1920.-464.1080.1880/-1920.0.1536.824@0.0.1920.1040" timestamp="1580139810160" />
-    <state width="1877" height="104" key="GridCell.Tab.0.center" timestamp="1580139810160">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state width="1877" height="396" key="GridCell.Tab.0.bottom/0.0.1920.1160@0.0.1920.1160" timestamp="1580158686809" />
+    <state width="1877" height="396" key="GridCell.Tab.0.center" timestamp="1580158686809">
+      <screen x="0" y="0" width="1920" height="1160" />
     </state>
     <state width="1877" height="104" key="GridCell.Tab.0.center/0.0.1920.1040/1920.-464.1080.1880/-1920.0.1536.824@0.0.1920.1040" timestamp="1580139810160" />
-    <state width="1877" height="104" key="GridCell.Tab.0.left" timestamp="1580139810159">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state width="1877" height="396" key="GridCell.Tab.0.center/0.0.1920.1160@0.0.1920.1160" timestamp="1580158686809" />
+    <state width="1877" height="396" key="GridCell.Tab.0.left" timestamp="1580158686809">
+      <screen x="0" y="0" width="1920" height="1160" />
     </state>
     <state width="1877" height="104" key="GridCell.Tab.0.left/0.0.1920.1040/1920.-464.1080.1880/-1920.0.1536.824@0.0.1920.1040" timestamp="1580139810159" />
-    <state width="1877" height="104" key="GridCell.Tab.0.right" timestamp="1580139810160">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state width="1877" height="396" key="GridCell.Tab.0.left/0.0.1920.1160@0.0.1920.1160" timestamp="1580158686809" />
+    <state width="1877" height="396" key="GridCell.Tab.0.right" timestamp="1580158686809">
+      <screen x="0" y="0" width="1920" height="1160" />
     </state>
     <state width="1877" height="104" key="GridCell.Tab.0.right/0.0.1920.1040/1920.-464.1080.1880/-1920.0.1536.824@0.0.1920.1040" timestamp="1580139810160" />
+    <state width="1877" height="396" key="GridCell.Tab.0.right/0.0.1920.1160@0.0.1920.1160" timestamp="1580158686809" />
+    <state width="1877" height="396" key="GridCell.Tab.1.bottom" timestamp="1580158686809">
+      <screen x="0" y="0" width="1920" height="1160" />
+    </state>
+    <state width="1877" height="396" key="GridCell.Tab.1.bottom/0.0.1920.1160@0.0.1920.1160" timestamp="1580158686809" />
+    <state width="1877" height="396" key="GridCell.Tab.1.center" timestamp="1580158686809">
+      <screen x="0" y="0" width="1920" height="1160" />
+    </state>
+    <state width="1877" height="396" key="GridCell.Tab.1.center/0.0.1920.1160@0.0.1920.1160" timestamp="1580158686809" />
+    <state width="1877" height="396" key="GridCell.Tab.1.left" timestamp="1580158686809">
+      <screen x="0" y="0" width="1920" height="1160" />
+    </state>
+    <state width="1877" height="396" key="GridCell.Tab.1.left/0.0.1920.1160@0.0.1920.1160" timestamp="1580158686809" />
+    <state width="1877" height="396" key="GridCell.Tab.1.right" timestamp="1580158686809">
+      <screen x="0" y="0" width="1920" height="1160" />
+    </state>
+    <state width="1877" height="396" key="GridCell.Tab.1.right/0.0.1920.1160@0.0.1920.1160" timestamp="1580158686809" />
     <state x="440" y="98" key="SettingsEditor" timestamp="1580131691262">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="440" y="98" key="SettingsEditor/0.0.1920.1040/1920.-464.1080.1880/-1920.0.1536.824@0.0.1920.1040" timestamp="1580131691262" />
-    <state width="477" height="146" key="javadoc.popup.new" timestamp="1580140336630">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state x="552" y="316" key="Vcs.Push.Dialog.v2" timestamp="1580155485700">
+      <screen x="0" y="0" width="1920" height="1160" />
+    </state>
+    <state x="552" y="316" key="Vcs.Push.Dialog.v2/0.0.1920.1160@0.0.1920.1160" timestamp="1580155485700" />
+    <state width="477" height="163" key="javadoc.popup.new" timestamp="1580155654508">
+      <screen x="0" y="0" width="1920" height="1160" />
     </state>
     <state width="477" height="146" key="javadoc.popup.new/0.0.1920.1040/1920.-464.1080.1880/-1920.0.1536.824@0.0.1920.1040" timestamp="1580140336630" />
+    <state width="477" height="163" key="javadoc.popup.new/0.0.1920.1160@0.0.1920.1160" timestamp="1580155654508" />
   </component>
 </project>
