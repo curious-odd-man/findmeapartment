@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.web.*?>
+
+<GridPane alignment="center" hgap="10" vgap="10" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MainWindow">
+   <children>
+      <VBox>
+         <children>
+            <Button fx:id="btn_checkForNewAds" mnemonicParsing="false" onAction="#onCheckForNewAds" text="Check for new ads" />
+            <HBox spacing="10.0">
+               <children>
+                  <Label text="New Ads" />
+                  <Label fx:id="l_newAds" text="0" />
+               </children>
+            </HBox>
+            <ChoiceBox fx:id="cb_newAds" prefWidth="150.0" />
+            <HBox spacing="10.0">
+               <children>
+                  <Label text="Viewed Ads" />
+                  <Label fx:id="l_viewedAds" text="0" />
+               </children>
+            </HBox>
+            <ChoiceBox fx:id="cb_viewedAds" prefWidth="150.0" />
+            <HBox spacing="10.0">
+               <children>
+                  <Label text="Saved Ads" />
+                  <Label fx:id="l_savedAds" text="0" />
+               </children>
+            </HBox>
+            <ChoiceBox fx:id="cb_savedAds" prefWidth="150.0" />
+            <HBox spacing="10.0">
+               <children>
+                  <Label text="Filtered Ads" />
+                  <Label fx:id="l_filteredAds" text="0" />
+               </children>
+            </HBox>
+            <ChoiceBox fx:id="cb_filteredAds" prefWidth="150.0" />
+         </children>
+      </VBox>
+      <VBox spacing="10.0" GridPane.columnIndex="1">
+         <children>
+            <HBox spacing="10.0">
+               <children>
+                  <Button fx:id="btn_delete" mnemonicParsing="false" onAction="#onSave" text="Save">
+                     <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </padding>
+                  </Button>
+                  <Button fx:id="btn_save" mnemonicParsing="false" onAction="#onDelete" text="Delete">
+                     <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </padding>
+                  </Button>
+               </children>
+               <VBox.margin>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </VBox.margin>
+            </HBox>
+            <WebView fx:id="wv_mainWeb" minHeight="-Infinity" minWidth="-Infinity" prefHeight="-1.0" prefWidth="-1.0" />
+         </children>
+         <padding>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </padding>
+      </VBox>
+   </children>
+   <columnConstraints>
+      <ColumnConstraints />
+      <ColumnConstraints />
+   </columnConstraints>
+   <rowConstraints>
+      <RowConstraints />
+   </rowConstraints>
+</GridPane>
