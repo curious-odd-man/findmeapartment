@@ -1,13 +1,17 @@
 import java.nio.file.{Files, Paths, StandardOpenOption}
+import java.util.Objects
 
 import org.jsoup.Jsoup
 import org.jsoup.nodes.{Document, Element}
 
 import scala.collection.JavaConversions._
+import scala.collection.immutable.HashSet
 import scala.io.Source
 
 object main {
 
+  private val FILE_TO_STORE_KNOWN_ADS = "AllLinks.log"
+  private val OUTPUT = "OUTPUT.log"
   private val FILE_TO_STORE_VIEWED_ADS = "AlreadyViewedAds.log"
   private val FILE_TO_STORE_LINKS_TO_ADS = "AlreadyViewedAdsLinks.log"
   private val OUTPUT_HTML_FILE = "NewAds.html"
@@ -22,12 +26,12 @@ object main {
 
   case class Address(city: String, district: String, street: String)
 
-  case class Advertisement(text: String, rooms: Integer, area: Float, seria: String, floor: String, price: Float, pricePerMeter: Float, homeType: String, originalLink: String, address: Address) {
+  case class Advertisement(address: Address, seria: String, homeType: String, text: String, rooms: Integer, area: Float, floor: String, price: Float, pricePerMeter: Float, originalLink: String, date: String) {
     def roomsBetween(min: Int, max: Int): Boolean = {
       min <= rooms && rooms <= max
     }
 
-    override def hashCode(): Int = text.hashCode()
+    override def hashCode(): Int = Objects.hash(address, rooms, seria, floor)
   }
 
   def extractLinks(doc: Document): List[String] = {
@@ -91,78 +95,82 @@ object main {
 
     val map = table.map(tableRowToPair).toMap
 
-    val prices = map("Цена:").replace(" ", "").replace("(", "").split("€")
+    val prices = map.getOrDefault("Цена:", "ERROR").replace(" ", "").replace("(", "").split("€")
 
-    val addr = Address(map("Город:"), map("Район:"), map("Улица:"))
-    val ad = Advertisement(main.text(), toInt(map("Комнат:")), numToArea(map("Площадь:")), map("Серия:"), map("Этаж / этажей:"), prices(0).toFloat, 0, map("Тип дома:"), link, addr)
-    println(ad)
+    val addr = Address(map.getOrDefault("Город:", "ERROR"), map.getOrDefault("Район:", "ERROR"), map.getOrDefault("Улица:", "ERROR").replace("[Карта]", "").trim)
+    val ad = Advertisement(addr, map.getOrDefault("Серия:", "ERROR"),
+      map.getOrDefault("Тип дома:", "ERROR"), main.text(), toInt(map.getOrDefault("Комнат:", "0")),
+      numToArea(map.getOrDefault("Площадь:", "0")), map.getOrDefault("Этаж / этажей:", "ERROR"), prices(0).toFloat, 0, link, map.getOrDefault("Дата:", "ERROR"))
     ad
   }
 
   def main(args: Array[String]): Unit = {
+    val knownAds = Paths.get(FILE_TO_STORE_KNOWN_ADS)
+    if (!Files.exists(knownAds))
+      Files.createFile(knownAds)
 
-    val minRooms = {
-      if (args.length >= 1) args(0).toInt
-      else {
-        println("Usage java -jar FindMeApartment minRooms [maxRooms]")
-        System.exit(-1)
-        0
-      }
-    }
-
-    val maxRooms = {
-      if (args.length >= 2) args(1).toInt
-      else minRooms
-    }
-
-    val path = Paths.get(FILE_TO_STORE_VIEWED_ADS)
-
-    if (!Files.exists(path))
-      Files.createFile(path)
-
-    val path1 = Paths.get(FILE_TO_STORE_LINKS_TO_ADS)
-
-    if (!Files.exists(path1))
-      Files.createFile(path1)
-
-    val viewedAdsSource = Source.fromFile(FILE_TO_STORE_VIEWED_ADS)
-    val linksOfViewedAdsSource = Source.fromFile(FILE_TO_STORE_LINKS_TO_ADS)
-
-    val viewedAds = viewedAdsSource.getLines().map(_.toInt).toSet
-    viewedAdsSource.close()
-    val linksOfViewedAds = linksOfViewedAdsSource.getLines().toSet
-    linksOfViewedAdsSource.close()
-
-    println("Already seen " + viewedAds.size + " ads.")
+    val outputPath = Paths.get(OUTPUT)
+    if (!Files.exists(outputPath))
+      Files.createFile(outputPath)
 
     val allPages = getAllPages("https://m.ss.com/ru/real-estate/flats/riga/all/sell/")
-
     println("Found " + allPages.size + " new pages.")
 
-    print("Extracting ads information: ")
-    val allNewAds = allPages.par.flatMap(extractLinks)
-      .filterNot(lnk => linksOfViewedAds.contains(lnk))
+    val viewedAdsSource = Source.fromFile(FILE_TO_STORE_KNOWN_ADS)
+    val viewedAds = HashSet() ++ viewedAdsSource.getLines()
+    viewedAdsSource.close()
+
+    allPages.toStream
+      .flatMap(extractLinks)
       .map(linkToAdvertisement)
-      .filter(_.roomsBetween(minRooms, maxRooms))
-      .filterNot(adv => viewedAds.contains(adv.hashCode()))
-      .filter(ad => Seq("центр", "дарзциемс", "кенгарагс", "плявниеки", "пурвциемс", "катлакалнс", "зиепниеккалнс", "торнякалнс").contains(ad.address.district.toLowerCase))
+      .filter(ad => ad.address.district.toLowerCase.equals("кенгарагс"))
+      .filter(ad => ad.roomsBetween(3, 4))
+      .filter(ad => ad.seria == "Лит. пр.")
+      .map(v => {
+        println(v)
+        v
+      })
+      .filter(ad => {
+      val res = !viewedAds.contains(ad.toString)
+      println("After filter: " + res)
+      res
+    })
+      .map(ad => {
+        Files.write(knownAds, (ad.toString + "\n").getBytes, StandardOpenOption.APPEND)
+        ad
+      })
+      .map(ad => List(ad.address.street, ad.floor, ad.rooms, ad.price, ad.originalLink).mkString("\t"))
+      .foreach(str => Files.write(outputPath, (str + "\n").getBytes, StandardOpenOption.APPEND))
 
-    println("DONE!")
 
-    println("Found " + allNewAds.size + " new ads.")
+    //    val linksOfViewedAdsSource = Source.fromFile(FILE_TO_STORE_LINKS_TO_ADS)
+    //    val linksOfViewedAds = linksOfViewedAdsSource.getLines().toSet
+    //    linksOfViewedAdsSource.close()
 
-    val outputPath = Paths.get(OUTPUT_HTML_FILE)
-    Files.deleteIfExists(outputPath)
-
-    if (allNewAds.nonEmpty) {
-      val generatedPage = allNewAds
-        .map(_.originalLink.replaceFirst("https://m.ss.com", "https://ss.com"))
-        .map(link => "<a href=\"" + link + "\">" + link + "</a>\n" +
-          "<iframe src=\"" + link + "\" height=\"2000\" width=\"1850\" allowTransparency=\"true\" scrolling=\"yes\" ></iframe><br>\n")
-        .reduce(_ + _)
-
-      Files.write(outputPath, generatedPage.getBytes)
-      Files.write(path, allNewAds.map(_.hashCode + "\n").reduce(_ + _).getBytes, StandardOpenOption.APPEND)
-    }
+    //    print("Extracting ads information: ")
+    //    val allNewAds = allPages.par.flatMap(extractLinks)
+    //      .filterNot(lnk => linksOfViewedAds.contains(lnk))
+    //      .map(linkToAdvertisement)
+    //      .filter(_.roomsBetween(minRooms, maxRooms))
+    //      .filterNot(adv => viewedAds.contains(adv.hashCode()))
+    //      .filter(ad => Seq("центр", "дарзциемс", "кенгарагс", "плявниеки", "пурвциемс", "катлакалнс", "зиепниеккалнс", "торнякалнс").contains(ad.address.district.toLowerCase))
+    //
+    //    println("DONE!")
+    //
+    //    println("Found " + allNewAds.size + " new ads.")
+    //
+    //    val outputPath = Paths.get(OUTPUT_HTML_FILE)
+    //    Files.deleteIfExists(outputPath)
+    //
+    //    if (allNewAds.nonEmpty) {
+    //      val generatedPage = allNewAds
+    //        .map(_.originalLink.replaceFirst("https://m.ss.com", "https://ss.com"))
+    //        .map(link => "<a href=\"" + link + "\">" + link + "</a>\n" +
+    //          "<iframe src=\"" + link + "\" height=\"2000\" width=\"1850\" allowTransparency=\"true\" scrolling=\"yes\" ></iframe><br>\n")
+    //        .reduce(_ + _)
+    //
+    //      Files.write(outputPath, generatedPage.getBytes)
+    //      Files.write(path, allNewAds.map(_.hashCode + "\n").reduce(_ + _).getBytes, StandardOpenOption.APPEND)
+    //    }
   }
 }
