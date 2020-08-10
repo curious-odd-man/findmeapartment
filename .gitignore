@@ -1,5 +1,11 @@
 *.class
 *.log
-target/**/
 out/**/
-.idea/**/
+target
+.idea
+project
+
+/AllLinks_119.log_hand_over
+/OUTPUT_119.log_hand_over
+/ProbableSellAndHandOver
+/src/main/resources/META-INF/MANIFEST.MF
